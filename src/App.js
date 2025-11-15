@@ -1,24 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Header from "./componentes/layout/Header";
+import Footer from "./componentes/layout/Footer";
+import Login from "./componentes/pages/Login";
+
+
+import ResultadosKilometro from "./componentes/ResultadosKilometro";
+import ResultadosPersecucion from "./componentes/ResultadosPersecucion";
+import ResultadosVelocidad200 from "./componentes/ResultadosVelocidad200";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="min-h-screen flex flex-col bg-gray-100">
+
+        <Header />
+
+        <main className="flex-grow p-4">
+          <Routes>
+
+            <Route path="/" element={<h1 className="text-3xl">Bienvenido al Panel de Resultados VR</h1>} />
+
+            <Route path="/kilometro" element={<ResultadosKilometro />} />
+
+            <Route path="/persecucion" element={<ResultadosPersecucion />} />
+
+            <Route path="/velocidad200" element={<ResultadosVelocidad200 />} />
+
+            <Route path="/login" element={<Login />} />
+
+
+          </Routes>
+        </main>
+
+        <Footer />
+
+      </div>
+    </BrowserRouter>
   );
 }
 
