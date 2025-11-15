@@ -8,6 +8,8 @@ import Login from "./componentes/pages/Login";
 import ResultadosKilometro from "./componentes/ResultadosKilometro";
 import ResultadosPersecucion from "./componentes/ResultadosPersecucion";
 import ResultadosVelocidad200 from "./componentes/ResultadosVelocidad200";
+import AdminPruebas from "./componentes/AdminPruebas";
+
 
 function App() {
   return (
@@ -19,7 +21,8 @@ function App() {
         <main className="flex-grow p-4">
           <Routes>
 
-            <Route path="/" element={<h1 className="text-3xl">Bienvenido al Panel de Resultados VR</h1>} />
+            <Route path="/" element={<AdminPruebas />} />
+
 
             <Route path="/kilometro" element={<ResultadosKilometro />} />
 

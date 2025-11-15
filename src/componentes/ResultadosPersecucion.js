@@ -29,7 +29,19 @@ export default function ResultadosPersecucion() {
     cargarDatos();
   }, []);
 
-  // ELIMINAR SOLO SI ES ADMIN
+  // =====================================================
+  //   VELOCIDAD PROMEDIO — 333m por vuelta
+  // =====================================================
+  const calcularVelocidad = (tiempoTotalSegundos, vueltas) => {
+    const distanciaMetros = vueltas * 333; // metros
+    const distanciaKm = distanciaMetros / 1000; // convertir a km
+    const horas = tiempoTotalSegundos / 3600;
+    return distanciaKm / horas; // km/h
+  };
+
+  // =====================================================
+  //   ELIMINAR (solo admin)
+  // =====================================================
   const eliminarResultado = async (id) => {
     const confirm = await Swal.fire({
       title: "¿Eliminar registro?",
@@ -65,7 +77,9 @@ export default function ResultadosPersecucion() {
     }
   };
 
+  // =====================================================
   // FILTRAR RESULTADOS
+  // =====================================================
   const resultadosFiltrados = resultados.filter((r) => {
     const categoria = obtenerCategoria(r.edad);
     const coincideSexo = filtroSexo === "Todos" || r.genero === filtroSexo;
@@ -103,9 +117,10 @@ export default function ResultadosPersecucion() {
       {/* TABLA */}
       <div className="bg-white shadow-lg rounded-xl border">
 
-        <div className="grid grid-cols-6 px-6 py-3 bg-gray-100 border-b font-bold">
+        <div className="grid grid-cols-7 px-6 py-3 bg-gray-100 border-b font-bold">
           <div>#</div>
           <div>Tiempo Total</div>
+          <div>Vel. Prom.</div>
           <div>Vueltas</div>
           <div>Género / Categoría</div>
           <div>Fecha</div>
@@ -114,10 +129,13 @@ export default function ResultadosPersecucion() {
 
         {paginaVisible.map((r, index) => {
           const categoria = obtenerCategoria(r.edad);
+          const vueltas = r.tiemposPorVuelta.length;
+
+          const velProm = calcularVelocidad(r.tiempoTotal, vueltas);
 
           return (
             <div key={r._id}
-              className="grid grid-cols-6 px-6 py-4 border-b hover:bg-gray-50"
+              className="grid grid-cols-7 px-6 py-4 border-b hover:bg-gray-50"
             >
               <div>{indiceInicial + index + 1}</div>
 
@@ -125,6 +143,12 @@ export default function ResultadosPersecucion() {
                 {formatearTiempo(r.tiempoTotal)}
               </div>
 
+              {/* Velocidad promedio */}
+              <div className="font-bold text-green-600">
+                {velProm.toFixed(2)} km/h
+              </div>
+
+              {/* Lista de vueltas */}
               <div className="text-sm">
                 <ul className="list-disc ml-4">
                   {r.tiemposPorVuelta.map((t, i) => (
@@ -133,6 +157,7 @@ export default function ResultadosPersecucion() {
                 </ul>
               </div>
 
+              {/* Género + categoría */}
               <div>
                 <span>{r.genero}</span><br />
                 <span className={`px-2 py-1 text-xs rounded-full ${categoriaBadge(categoria)}`}>
@@ -140,8 +165,10 @@ export default function ResultadosPersecucion() {
                 </span>
               </div>
 
+              {/* Fecha */}
               <div>{new Date(r.fecha).toLocaleString()}</div>
 
+              {/* Eliminar */}
               {esAdmin && (
                 <div>
                   <button
@@ -155,9 +182,7 @@ export default function ResultadosPersecucion() {
             </div>
           );
         })}
-
       </div>
-
     </div>
   );
 }

@@ -98,9 +98,10 @@ export default function ResultadosVelocidad200() {
       {/* TABLA */}
       <div className="bg-white shadow-lg rounded-xl border">
 
-        <div className="grid grid-cols-5 px-6 py-3 bg-gray-100 border-b font-bold">
+        <div className="grid grid-cols-6 px-6 py-3 bg-gray-100 border-b font-bold">
           <div>#</div>
           <div>Tiempo</div>
+          <div>Vel. Prom.</div>
           <div>Género / Categoría</div>
           <div>Fecha</div>
           {esAdmin && <div>Acciones</div>}
@@ -112,12 +113,21 @@ export default function ResultadosVelocidad200() {
           return (
             <div
               key={r._id}
-              className="grid grid-cols-5 px-6 py-4 border-b hover:bg-gray-50"
+              className="grid grid-cols-6 px-6 py-4 border-b hover:bg-gray-50"
             >
               <div>{indiceInicial + i + 1}</div>
 
-              <div className="font-semibold">{formatearTiempo(r.tiempoTotal)}</div>
+              {/* Tiempo total */}
+              <div className="font-semibold">
+                {formatearTiempo(r.tiempoTotal)}
+              </div>
 
+              {/* Velocidad promedio directamente desde la BD */}
+              <div className="font-bold text-green-600">
+                {r.velocidadPromedio?.toFixed(2)} km/h
+              </div>
+
+              {/* Género y categoría */}
               <div className="flex flex-col">
                 <span>{r.genero}</span>
                 <span
@@ -129,8 +139,10 @@ export default function ResultadosVelocidad200() {
                 </span>
               </div>
 
+              {/* Fecha */}
               <div>{new Date(r.fecha).toLocaleString()}</div>
 
+              {/* Acciones */}
               {esAdmin && (
                 <div>
                   <button
